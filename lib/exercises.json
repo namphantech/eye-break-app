@@ -1,0 +1,82 @@
+[
+    {
+        "id": "look-far-20m",
+        "type": "eye",
+        "title": "👀 Nhìn xa 20m trong 20 giây",
+        "description": "Rời mắt khỏi màn hình, nhìn ra xa khoảng 20 mét trong 20 giây để giảm căng thẳng cho mắt.",
+        "actionText": "Bắt đầu nhìn xa 🌿",
+        "duration": 20,
+        "animation": "forest-blur.json",
+        "sound": "chime.mp3"
+    },
+    {
+        "id": "blink-10-times",
+        "type": "eye",
+        "title": "💧 Chớp mắt 10 lần",
+        "description": "Nháy mắt nhẹ nhàng 10 lần để làm ẩm giác mạc và tránh khô mắt.",
+        "actionText": "Bắt đầu chớp mắt 💧",
+        "duration": 10,
+        "animation": "blink-fun.json",
+        "sound": "soft-bell.mp3"
+    },
+    {
+        "id": "neck-roll",
+        "type": "neck",
+        "title": "💆 Xoay cổ nhẹ 3 vòng mỗi bên",
+        "description": "Ngồi thẳng, xoay cổ chậm rãi theo chiều kim đồng hồ 3 vòng rồi ngược lại.",
+        "actionText": "Xoay cổ cùng mình 💆‍♂️",
+        "duration": 30,
+        "animation": "neck-roll.json",
+        "sound": "relax-tone.mp3"
+    },
+    {
+        "id": "stretch-posture",
+        "type": "posture",
+        "title": "🧘 Duỗi tay, vươn vai, hít sâu 3 lần",
+        "description": "Đứng lên, vươn vai, hít sâu 4s – giữ 2s – thở ra 6s. Lặp lại 3 lần.",
+        "actionText": "Hít sâu, thở ra 🌬️",
+        "duration": 30,
+        "animation": "breathing.json",
+        "sound": "calm-wave.mp3"
+    },
+    {
+        "id": "deep-breath",
+        "type": "breathing",
+        "title": "🌊 Thở sâu 4–2–6",
+        "description": "Hít vào 4 giây, giữ hơi 2 giây, thở ra 6 giây. Lặp lại 3 lần.",
+        "actionText": "Bắt đầu thở sâu 🌊",
+        "duration": 36,
+        "animation": "wave-breath.json",
+        "sound": "wind-chime.mp3"
+    },
+    {
+        "id": "hand-shake",
+        "type": "hand",
+        "title": "🤲 Lắc tay 10 lần",
+        "description": "Thả lỏng cổ tay, lắc nhẹ 10 lần để thư giãn cơ bắp cổ tay và vai.",
+        "actionText": "Lắc tay nào 🤲",
+        "duration": 15,
+        "animation": "hand-shake.json",
+        "sound": "ting.mp3"
+    },
+    {
+        "id": "shoulder-roll",
+        "type": "shoulder",
+        "title": "💪 Xoay vai 5 lần",
+        "description": "Nâng vai lên – xoay ra sau – hạ xuống. Làm 5 lần để giảm căng cơ vai.",
+        "actionText": "Xoay vai 💪",
+        "duration": 20,
+        "animation": "shoulder-roll.json",
+        "sound": "soft-tone.mp3"
+    },
+    {
+        "id": "palming",
+        "type": "eye",
+        "title": "🖐️ Che mắt thư giãn",
+        "description": "Xoa hai tay cho ấm, nhẹ nhàng áp lòng bàn tay lên mắt và thả lỏng trong 20 giây.",
+        "actionText": "Che mắt và thư giãn 🖐️",
+        "duration": 20,
+        "animation": "palming.json",
+        "sound": "warm-tone.mp3"
+    }
+]
