@@ -1,0 +1,1 @@
+# Eye Break Reminder App - Functionality Documentation
