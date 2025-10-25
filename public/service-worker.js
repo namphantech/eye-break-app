@@ -151,11 +151,29 @@ async function syncBreaks() {
 async function checkBreakReminder() {
   try {
     const db = await openDB();
-    const settings = await db.get("settings", "reminder-interval");
-    const reminderInterval = settings ? settings.value : 20; // default to 20 minutes
 
-    const lastBreakRecord = await db.get("settings", "last-break-time");
-    const lastBreakTime = lastBreakRecord ? lastBreakRecord.value : Date.now();
+
+    const reminderInterval = await new Promise((resolve) => {
+      const tx = db.transaction("settings", "readonly");
+      const store = tx.objectStore("settings");
+      const req = store.get("reminder-interval");
+
+      req.onsuccess = () => {
+        resolve(req.result ? Number(req.result.value) : 20); // default 20 phút
+      };
+      req.onerror = () => resolve(20);
+    });
+
+    const lastBreakTime = await new Promise((resolve) => {
+      const tx = db.transaction("settings", "readonly");
+      const store = tx.objectStore("settings");
+      const req = store.get("last-break-time");
+
+      req.onsuccess = () => {
+        resolve(req.result ? Number(req.result.value) : Date.now());
+      };
+      req.onerror = () => resolve(Date.now());
+    });
 
     if (Date.now() - lastBreakTime > reminderInterval * 60 * 1000) {
       self.registration.showNotification("Time for an Eye Break!", {
@@ -173,6 +191,7 @@ async function checkBreakReminder() {
     console.error("Break reminder check failed:", error);
   }
 }
+
 
 async function getTimerState() {
   try {

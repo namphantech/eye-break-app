@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase/client";
-import { registerServiceWorker } from "@/lib/notifications";
+import { Button } from "@/components/ui/button";
+import DashboardStats from "@/components/dashboard-stats";
 import HeaderMenu from "@/components/header-menu";
-import TimerComponent from "@/components/timer";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ArrowLeft } from "lucide-react";
 
-export default function DashboardPage() {
+export default function StatisticsPage() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -23,7 +24,6 @@ export default function DashboardPage() {
         router.push("/auth");
       } else {
         setUser(session.user);
-        await registerServiceWorker();
       }
       setIsLoading(false);
     };
@@ -36,11 +36,15 @@ export default function DashboardPage() {
     router.push("/auth");
   };
 
+  const handleBack = () => {
+    router.push("/dashboard");
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -48,25 +52,29 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
-      <header className="bg-white/80 dark:bg-gray-800/80 shadow-sm border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-teal-800 dark:text-teal-200">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Eye Break
           </h1>
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <HeaderMenu user={user} onLogout={handleLogout} />
+            <Button variant="outline" onClick={handleBack}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-12">
-        <div className="flex flex-col items-center">
-          {/* Centered Timer with more spacing */}
-          <div className="w-full max-w-3xl mb-12">
-            <TimerComponent />
-          </div>
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
+            Statistics
+          </h2>
+          <DashboardStats />
         </div>
       </main>
     </div>

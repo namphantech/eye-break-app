@@ -19,6 +19,7 @@ import {
 } from "@/lib/indexedb/timerStore";
 import { syncTimerStateWithServiceWorker } from "@/lib/indexedb/utils";
 import { Exercise } from "@/lib/exerciseUtils";
+import { playSoftNotificationSound } from "@/lib/sound";
 
 export default function TimerComponent() {
   const [timeLeft, setTimeLeft] = useState(20 * 60);
@@ -26,6 +27,7 @@ export default function TimerComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [reminderInterval, setReminderInterval] = useState(20);
   const [showControls, setShowControls] = useState(true);
+  const [isBreakEnding, setIsBreakEnding] = useState(false);
   const supabase = getSupabaseClient();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -33,8 +35,6 @@ export default function TimerComponent() {
     (async () => {
       try {
         const savedState = await loadTimerState();
-
-        console.log({ savedState });
         if (savedState) {
           let adjustedTimeLeft = savedState.timeLeft;
           let adjustedIsRunning = savedState.isRunning || false;
@@ -112,6 +112,11 @@ export default function TimerComponent() {
           if (newTime <= 0) {
             setIsRunning(false);
             setShowControls(true);
+            setIsBreakEnding(true);
+
+            playSoftNotificationSound();
+
+            setTimeout(() => setIsBreakEnding(false), 5000);
             handleBreakLogged();
             return 0;
           }
@@ -245,25 +250,48 @@ export default function TimerComponent() {
     }
   };
 
+  // Calculate progress percentage for animations
+  const progressPercentage =
+    ((reminderInterval * 60 - timeLeft) / (reminderInterval * 60)) * 100;
+  const isLowTime = timeLeft <= 60 && timeLeft > 0;
+  const isCriticalTime = timeLeft <= 10 && timeLeft > 0;
+
   return (
-    <Card className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-blue-100 border-0 shadow-none">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-center text-2xl font-bold text-indigo-800">
+    <Card className="h-full flex flex-col bg-gradient-to-br from-teal-50/80 to-cyan-50/80 border-0 shadow-none relative overflow-hidden backdrop-blur-sm">
+      {/* Soft blur background effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-teal-100/20 backdrop-blur-[2px]"></div>
+
+      {/* Animated background effect */}
+      {isRunning && (
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-200/20 to-transparent animate-pulse-slow"></div>
+      )}
+
+      {/* Break ending animation */}
+      {isBreakEnding && (
+        <div className="absolute inset-0 bg-gradient-to-r from-green-300/10 to-emerald-400/10 animate-fadeInOut"></div>
+      )}
+
+      <CardHeader className="pb-4 relative z-10">
+        <CardTitle className="text-center text-2xl font-bold text-teal-800">
           Focus Timer
         </CardTitle>
-        <CardDescription className="text-center text-indigo-600">
+        <CardDescription className="text-center text-slate-500">
           {isRunning
             ? `Stay focused on your ${reminderInterval}-minute break`
             : `Take a mindful ${reminderInterval}-minute break`}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center items-center space-y-8">
-        {/* Main timer display - larger and more prominent */}
+      <CardContent className="flex-1 flex flex-col justify-center items-center space-y-8 relative z-10">
+        {/* Main timer display - larger and more prominent with animations */}
         <div className="relative">
           <div
-            className={`text-8xl font-bold font-mono transition-all duration-300 ${
-              timeLeft <= 60 ? "text-red-500 animate-pulse" : "text-indigo-700"
-            }`}
+            className={`text-8xl font-bold font-mono transition-all duration-700 ease-out ${
+              isCriticalTime
+                ? "text-red-400 animate-pulse-fast"
+                : isLowTime
+                ? "text-orange-400 animate-pulse"
+                : "text-teal-700"
+            } ${isBreakEnding ? "animate-gentle-bounce" : ""}`}
           >
             {formatTime(timeLeft)}
           </div>
@@ -272,34 +300,48 @@ export default function TimerComponent() {
           </div>
         </div>
 
-        {/* Progress circle for visual feedback */}
+        {/* Progress circle for visual feedback with softer design */}
         <div className="relative w-48 h-48">
+          {/* Background circle with soft blur */}
           <svg className="w-full h-full" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
-              r="45"
+              r="42"
               fill="none"
-              stroke="#e0e7ff"
-              strokeWidth="8"
+              stroke="rgba(217, 242, 235, 0.5)"
+              strokeWidth="6"
+              className="backdrop-blur-sm"
             />
             <circle
               cx="50"
               cy="50"
-              r="45"
+              r="42"
               fill="none"
-              stroke="#4f46e5"
-              strokeWidth="8"
+              stroke={
+                isCriticalTime ? "#F87171" : isLowTime ? "#FBBF24" : "#3BAE8A"
+              }
+              strokeWidth="6"
               strokeLinecap="round"
-              strokeDasharray="283"
+              strokeDasharray="264"
               strokeDashoffset={
-                283 -
-                (283 * (reminderInterval * 60 - timeLeft)) /
+                264 -
+                (264 * (reminderInterval * 60 - timeLeft)) /
                   (reminderInterval * 60)
               }
               transform="rotate(-90 50 50)"
+              className={
+                isRunning
+                  ? "transition-all duration-1000 ease-out"
+                  : "transition-all duration-700 ease-out"
+              }
             />
           </svg>
+
+          {/* Animated pulse indicator when running */}
+          {isRunning && (
+            <div className="absolute inset-0 rounded-full border-2 border-teal-300/40 animate-ping-slow"></div>
+          )}
         </div>
 
         {/* Controls - hidden when timer is running */}
@@ -308,7 +350,7 @@ export default function TimerComponent() {
             <div className="flex gap-4 w-full justify-center">
               <Button
                 onClick={toggleTimer}
-                className="px-8 py-3 text-lg bg-indigo-600 hover:bg-indigo-700"
+                className="px-8 py-3 text-lg bg-teal-600 hover:bg-teal-700 transition-all duration-500 ease-out hover:scale-105"
                 variant={isRunning ? "destructive" : "default"}
               >
                 {isRunning ? "Pause" : "Start"}
@@ -316,7 +358,7 @@ export default function TimerComponent() {
               <Button
                 onClick={resetTimer}
                 variant="outline"
-                className="px-8 py-3 text-lg bg-white border-indigo-300 text-indigo-700 hover:bg-indigo-50"
+                className="px-8 py-3 text-lg bg-white/80 border-teal-300 text-teal-700 hover:bg-teal-50/80 transition-all duration-500 ease-out hover:scale-105 backdrop-blur-sm"
               >
                 Reset
               </Button>
@@ -325,14 +367,14 @@ export default function TimerComponent() {
             <Button
               onClick={logBreakManually}
               variant="secondary"
-              className="w-full max-w-xs mx-auto bg-white border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+              className="w-full max-w-xs mx-auto bg-white/80 border-teal-200 text-teal-700 hover:bg-teal-50/80 transition-all duration-500 ease-out hover:shadow-md backdrop-blur-sm"
               disabled={isLoading}
             >
               {isLoading ? "Logging..." : "Log Break Now"}
             </Button>
 
-            <div className="w-full max-w-xs pt-6 border-t border-indigo-200">
-              <label className="text-sm font-medium text-indigo-700 block mb-3 text-center">
+            <div className="w-full max-w-xs pt-6 border-t border-teal-200/50">
+              <label className="text-sm font-medium text-teal-700 block mb-3 text-center">
                 Break Duration: {reminderInterval} minutes
               </label>
               <input
@@ -346,9 +388,9 @@ export default function TimerComponent() {
                   setTimeLeft(Number.parseInt(e.target.value) * 60);
                   setIsRunning(false);
                 }}
-                className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-2 bg-teal-200 rounded-lg appearance-none cursor-pointer transition-all duration-300 hover:opacity-90"
               />
-              <div className="flex justify-between text-xs text-indigo-600 mt-1">
+              <div className="flex justify-between text-xs text-teal-600 mt-1">
                 <span>5m</span>
                 <span>60m</span>
               </div>
@@ -361,7 +403,7 @@ export default function TimerComponent() {
           <div className="flex gap-4">
             <Button
               onClick={toggleTimer}
-              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700"
+              className="px-6 py-2 bg-teal-600 hover:bg-teal-700 transition-all duration-500 ease-out hover:scale-105"
               variant="default"
             >
               Pause
@@ -372,7 +414,7 @@ export default function TimerComponent() {
                 setShowControls(true);
               }}
               variant="outline"
-              className="px-6 py-2 bg-white border-indigo-300 text-indigo-700 hover:bg-indigo-50"
+              className="px-6 py-2 bg-white/80 border-teal-300 text-teal-700 hover:bg-teal-50/80 transition-all duration-500 ease-out hover:scale-105 backdrop-blur-sm"
             >
               Stop
             </Button>

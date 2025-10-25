@@ -109,7 +109,7 @@ export default function DashboardStats() {
       <div className="grid grid-cols-3 gap-4">
         <Card className="bg-white hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-teal-800">
               Total Breaks
             </CardTitle>
           </CardHeader>
@@ -123,7 +123,7 @@ export default function DashboardStats() {
 
         <Card className="bg-white hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-teal-800">
               Avg. Interval
             </CardTitle>
           </CardHeader>
@@ -137,7 +137,7 @@ export default function DashboardStats() {
 
         <Card className="bg-white hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium text-teal-800">
               Longest Streak
             </CardTitle>
           </CardHeader>

@@ -25,7 +25,7 @@ export const syncTimerStateWithServiceWorker = async (timerState: any) => {
     const tx = db.transaction("settings", "readwrite");
     const store = tx.objectStore("settings");
     
-    // Update reminder interval
+  
     if (timerState.reminderInterval) {
       store.put({
         key: "reminder-interval",
@@ -33,7 +33,6 @@ export const syncTimerStateWithServiceWorker = async (timerState: any) => {
       });
     }
     
-    // Update last updated time
     if (timerState.lastUpdated) {
       store.put({
         key: "last-updated",
