@@ -6,7 +6,6 @@ import { getSupabaseClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import ReminderToggle from "@/components/reminder-toggle";
 import ModernHeader from "@/components/modern-header";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { ArrowLeft } from "lucide-react";
 
 export default function RemindersPage() {

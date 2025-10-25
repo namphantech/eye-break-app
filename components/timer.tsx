@@ -19,6 +19,7 @@ import {
 import { syncTimerStateWithServiceWorker } from "@/lib/indexedb/utils";
 import { Exercise } from "@/lib/exerciseUtils";
 import { playSoftNotificationSound } from "@/lib/sound";
+import { useRouter } from "next/navigation";
 
 export default function TimerComponent() {
   const [timeLeft, setTimeLeft] = useState(20 * 60);
@@ -30,6 +31,8 @@ export default function TimerComponent() {
   const [focusStartTime, setFocusStartTime] = useState<number | null>(null);
   const supabase = getSupabaseClient();
   const [isInitialized, setIsInitialized] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -96,7 +99,7 @@ export default function TimerComponent() {
       focusStartTime,
       lastUpdated: Date.now(),
     };
-    console.log({ state });
+
     saveTimerState(state).catch((e) =>
       console.error("Failed to save timer state:", e)
     );
@@ -191,6 +194,8 @@ export default function TimerComponent() {
         await updateLastBreakTime();
         setTimeLeft(reminderInterval * 60);
         setFocusStartTime(null);
+
+        router.push(`/exercises/${randomExercise.id}`);
       }
     } catch (error) {
       console.error("Error logging break:", error);

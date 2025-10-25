@@ -10,7 +10,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RestEyes - Smart Eye Relaxation",
+  title: "LucidEye- Smart Eye Relaxation",
   description:
     "Take regular breaks to protect your eyes with smart reminders and analytics",
   manifest: "/manifest.json",
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

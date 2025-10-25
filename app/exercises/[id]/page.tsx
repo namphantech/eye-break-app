@@ -76,6 +76,9 @@ export default function ExercisePage() {
       new Notification("👏 Tuyệt vời!", {
         body: "Bạn vừa giúp đôi mắt nghỉ ngơi!",
         icon: "/icons/smile.png",
+        data: {
+          url: `/dashboard`,
+        },
       });
     }
 

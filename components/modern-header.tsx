@@ -46,7 +46,6 @@ export default function ModernHeader({
     { name: "Dashboard", href: "/dashboard", icon: User },
     { name: "Statistics", href: "/statistics", icon: BarChart },
     { name: "History", href: "/history", icon: History },
-
   ];
 
   const isActive = (href: string) => pathname === href;
@@ -62,7 +61,7 @@ export default function ModernHeader({
                 <span className="text-white font-bold text-sm">👁️</span>
               </div>
               <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
-                RestEyes
+                LucidEye
               </span>
             </div>
           </div>

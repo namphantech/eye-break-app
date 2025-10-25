@@ -103,11 +103,7 @@ self.addEventListener("notificationclick", (event) => {
         }
 
         if (clients.openWindow) {
-          const exerciseId = event.notification.data?.exerciseId;
-          const targetUrl = exerciseId
-            ? `/exercises/${exerciseId}`
-            : "/dashboard";
-          return clients.openWindow(targetUrl);
+          return clients.openWindow(url);
         }
       })
     );
@@ -123,9 +119,11 @@ self.addEventListener("push", (event) => {
       icon: "/icon-192.png",
       badge: "/icon-192.png",
       tag: data.tag || "break-reminder",
+      data: {
+        url: data?.url,
+      },
       requireInteraction: true,
     };
-
     event.waitUntil(self.registration.showNotification(title, options));
   }
 });
@@ -151,7 +149,6 @@ async function syncBreaks() {
 async function checkBreakReminder() {
   try {
     const db = await openDB();
-
 
     const reminderInterval = await new Promise((resolve) => {
       const tx = db.transaction("settings", "readonly");
@@ -191,7 +188,6 @@ async function checkBreakReminder() {
     console.error("Break reminder check failed:", error);
   }
 }
-
 
 async function getTimerState() {
   try {
@@ -266,7 +262,6 @@ self.addEventListener("message", (event) => {
   }
 
   if (event.data && event.data.action === "settingsUpdated") {
-    console.log("Received settings update from main app:", event.data.settings);
   }
 });
 
@@ -274,7 +269,7 @@ async function scheduleNotifications(interval) {
   if ("periodicSync" in self.registration) {
     try {
       const db = await openDB();
-      await db.put("settings", { key: "reminder-interval", value: interval });
+      // await db.put("settings", { key: "reminder-interval", value: interval });
 
       // Register periodic sync
       await self.registration.periodicSync.register("check-break-reminder", {

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getServiceWorkerSettings } from "@/lib/indexedb/utils";
+import { registerServiceWorker } from "@/lib/notifications";
 
 export default function ReminderToggle() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -40,6 +41,8 @@ export default function ReminderToggle() {
   }, []);
 
   const handleTriggerReminder = async () => {
+    // await registerServiceWorker();
+
     if (
       !("serviceWorker" in navigator) ||
       !navigator.serviceWorker.controller

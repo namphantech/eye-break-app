@@ -18,11 +18,32 @@ export default function DashboardPage() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       if (!session) {
         router.push("/auth");
       } else {
-        setUser(session.user);
-        await registerServiceWorker();
+        const currentUser = session.user;
+
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", currentUser.id)
+          .limit(1);
+
+        if (!profiles || profiles.length === 0) {
+          const { error: insertError } = await supabase
+            .from("profiles")
+            .insert({
+              id: currentUser.id,
+              email: currentUser.email,
+            });
+
+          if (insertError) {
+            console.error("Error creating user profile:", insertError);
+          }
+        }
+        setUser(currentUser);
+        // await registerServiceWorker();
       }
       setIsLoading(false);
     };
@@ -47,13 +68,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
-      <ModernHeader
-        user={user}
-        onLogout={handleLogout}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50 flex flex-col">
+      <ModernHeader user={user} onLogout={handleLogout} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
         <div className="flex flex-col items-center">
           {/* Centered Timer with more spacing */}
           <div className="w-full max-w-3xl mb-12">
@@ -61,6 +79,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+
+      {/* Footer with copyright */}
+      <footer className="py-4 text-center text-sm text-gray-500">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p>© {new Date().getFullYear()} LucidEye. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
