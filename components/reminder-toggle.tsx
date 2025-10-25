@@ -68,7 +68,7 @@ export default function ReminderToggle() {
   };
 
   return (
-    <Card className="mb-6 border-indigo-200 bg-indigo-50">
+    <Card className="mb-6 border-teal-200 bg-teal-50">
       <CardHeader>
         <CardTitle className="text-lg">Break Reminders</CardTitle>
         <CardDescription>
@@ -97,7 +97,7 @@ export default function ReminderToggle() {
           <Button
             onClick={handleTriggerReminder}
             disabled={isLoading}
-            className="w-24 bg-indigo-600 hover:bg-indigo-700"
+            className="w-24 bg-teal-600 hover:bg-teal-700"
           >
             {isLoading ? "Triggering..." : "Trigger Now"}
           </Button>
@@ -106,7 +106,7 @@ export default function ReminderToggle() {
         {status && (
           <div
             className={`text-sm ${
-              status.includes("Failed") ? "text-red-600" : "text-green-600"
+              status.includes("Failed") ? "text-red-600" : "text-teal-600"
             }`}
           >
             {status}

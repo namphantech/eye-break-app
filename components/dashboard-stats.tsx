@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { BreakStats } from "@/lib/types";
+import type { BreakLog, BreakStats } from "@/lib/types";
 import {
   BarChart,
   Bar,
@@ -63,6 +63,15 @@ export default function DashboardStats() {
         }
 
         const totalBreaks = logs.length;
+
+    
+        const totalDuration = logs.reduce(
+          (sum: number, log: BreakLog) => sum + log.break_duration_minutes,
+          0
+        );
+        const averageDuration =
+          totalBreaks > 0 ? Math.round(totalDuration / totalBreaks) : 0;
+
         const weeklyData = Array(7)
           .fill(0)
           .map((_, i) => {
@@ -80,7 +89,7 @@ export default function DashboardStats() {
 
         setStats({
           totalBreaks,
-          averageInterval: totalBreaks > 0 ? Math.round(1440 / totalBreaks) : 0,
+          averageInterval: averageDuration,
           longestStreak: 0,
           weeklyData,
         });
@@ -110,28 +119,28 @@ export default function DashboardStats() {
         <Card className="bg-white hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-teal-800">
-              Total Breaks
+              Total Focus Sessions
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-indigo-600">
+            <div className="text-3xl font-bold text-teal-600">
               {stats.totalBreaks}
             </div>
-            <p className="text-xs text-gray-500 mt-1">breaks logged</p>
+            <p className="text-xs text-gray-500 mt-1">sessions logged</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-teal-800">
-              Avg. Interval
+              Avg. Duration
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-indigo-600">
+            <div className="text-3xl font-bold text-teal-600">
               {stats.averageInterval}m
             </div>
-            <p className="text-xs text-gray-500 mt-1">between breaks</p>
+            <p className="text-xs text-gray-500 mt-1">per session</p>
           </CardContent>
         </Card>
 
@@ -142,7 +151,7 @@ export default function DashboardStats() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-indigo-600">
+            <div className="text-3xl font-bold text-teal-600">
               {stats.longestStreak}d
             </div>
             <p className="text-xs text-gray-500 mt-1">consecutive days</p>
@@ -152,8 +161,8 @@ export default function DashboardStats() {
 
       <Card className="bg-white">
         <CardHeader>
-          <CardTitle>Weekly Breaks</CardTitle>
-          <CardDescription>Breaks logged this week</CardDescription>
+          <CardTitle>Weekly Focus Sessions</CardTitle>
+          <CardDescription>Focus sessions logged this week</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -168,7 +177,7 @@ export default function DashboardStats() {
                   borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="breaks" fill="#4f46e5" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="breaks" fill="#3BAE8A" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

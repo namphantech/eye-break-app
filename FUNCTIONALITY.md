@@ -1,7 +1,6 @@
-# Eye Break Reminder App - Functionality Documentation
+# RestEyes Reminder App - Functionality Documentation
 
 ## Overview
-
 The Eye Break Reminder App is a web application designed to help users maintain healthy eye habits by taking regular breaks from screen time. The app combines a Pomodoro-style timer with health-conscious reminders to encourage users to rest their eyes periodically throughout the day.
 
 ## Core Features

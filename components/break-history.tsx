@@ -62,31 +62,52 @@ export default function BreakHistory() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Breaks</CardTitle>
-        <CardDescription>Your last 10 logged breaks</CardDescription>
+        <CardTitle>Recent Focus Sessions</CardTitle>
+        <CardDescription>
+          Your last 10 focus sessions
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {logs.length === 0 ? (
           <p className="text-center text-gray-500 py-8">
-            No breaks logged yet. Start your first break!
+            No focus sessions logged yet. Start your first focus session!
           </p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {logs.map((log) => (
               <div
                 key={log.id}
-                className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                className="flex flex-col p-4 bg-gray-50 rounded-lg border border-gray-200"
               >
-                <span className="text-sm text-gray-700">
-                  {new Date(log.logged_at).toLocaleDateString()} at{" "}
-                  {new Date(log.logged_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
-                <span className="text-sm font-medium text-indigo-600">
-                  {log.break_duration_minutes}m
-                </span>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="font-medium text-gray-900">
+                      {log.break_duration_minutes} minutes focused
+                    </div>
+                    {log.focus_start_time && (
+                      <div className="text-sm text-gray-600 mt-1">
+                        Started: {new Date(log.focus_start_time).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })} on {new Date(log.focus_start_time).toLocaleDateString()}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-gray-600">
+                      Completed
+                    </div>
+                    <div className="text-sm font-medium text-teal-600">
+                      {new Date(log.logged_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {new Date(log.logged_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

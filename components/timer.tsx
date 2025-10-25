@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { sendNotification } from "@/lib/notifications";
@@ -28,6 +27,7 @@ export default function TimerComponent() {
   const [reminderInterval, setReminderInterval] = useState(20);
   const [showControls, setShowControls] = useState(true);
   const [isBreakEnding, setIsBreakEnding] = useState(false);
+  const [focusStartTime, setFocusStartTime] = useState<number | null>(null);
   const supabase = getSupabaseClient();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -42,6 +42,7 @@ export default function TimerComponent() {
             savedState.showControls !== undefined
               ? savedState.showControls
               : true;
+          let adjustedFocusStartTime = savedState.focusStartTime || null;
 
           if (savedState.isRunning && savedState.lastUpdated) {
             const elapsedSeconds = Math.floor(
@@ -56,11 +57,13 @@ export default function TimerComponent() {
             if (newTimeLeft === 0) {
               adjustedIsRunning = false;
               adjustedShowControls = true;
+              adjustedFocusStartTime = null;
 
               setTimeLeft(0);
               setIsRunning(false);
               setReminderInterval(savedState.reminderInterval || 20);
               setShowControls(true);
+              setFocusStartTime(null);
               setIsInitialized(true);
 
               await handleBreakLogged();
@@ -72,6 +75,7 @@ export default function TimerComponent() {
           setIsRunning(adjustedIsRunning);
           setReminderInterval(savedState.reminderInterval || 20);
           setShowControls(adjustedShowControls);
+          setFocusStartTime(adjustedFocusStartTime);
         }
       } catch (e) {
         console.error("Failed to load timer state:", e);
@@ -89,6 +93,7 @@ export default function TimerComponent() {
       isRunning,
       reminderInterval,
       showControls,
+      focusStartTime,
       lastUpdated: Date.now(),
     };
     console.log({ state });
@@ -99,7 +104,7 @@ export default function TimerComponent() {
     syncTimerStateWithServiceWorker(state).catch((e) =>
       console.error("Failed to sync with service worker:", e)
     );
-  }, [timeLeft, isRunning, reminderInterval, showControls]);
+  }, [timeLeft, isRunning, reminderInterval, showControls, focusStartTime]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -116,7 +121,7 @@ export default function TimerComponent() {
 
             playSoftNotificationSound();
 
-            setTimeout(() => setIsBreakEnding(false), 5000);
+            setTimeout(() => setIsBreakEnding(false), 10000);
             handleBreakLogged();
             return 0;
           }
@@ -156,9 +161,17 @@ export default function TimerComponent() {
 
       if (profiles?.length) {
         const profile = profiles[0];
+        // Calculate focus duration in minutes
+        const focusDurationMinutes = focusStartTime
+          ? Math.floor((Date.now() - focusStartTime) / (1000 * 60))
+          : reminderInterval;
+
         await supabase.from("break_logs").insert({
           user_id: profile.id,
-          break_duration_minutes: reminderInterval,
+          break_duration_minutes: focusDurationMinutes,
+          focus_start_time: focusStartTime
+            ? new Date(focusStartTime).toISOString()
+            : null,
           logged_at: new Date().toISOString(),
         });
 
@@ -166,8 +179,8 @@ export default function TimerComponent() {
         const randomExercise =
           exercises[Math.floor(Math.random() * exercises.length)];
 
-        sendNotification("Eye Break Complete!", {
-          body: `Great job! Your eyes have had a ${reminderInterval}-minute break. Time for "${randomExercise.title}" exercise!`,
+        sendNotification("Focus Session Complete!", {
+          body: `Great job! You've focused for ${focusDurationMinutes} minutes. Time for "${randomExercise.title}" exercise!`,
           tag: "break-complete",
           data: {
             url: `/exercises/${randomExercise.id}`,
@@ -177,6 +190,7 @@ export default function TimerComponent() {
 
         await updateLastBreakTime();
         setTimeLeft(reminderInterval * 60);
+        setFocusStartTime(null);
       }
     } catch (error) {
       console.error("Error logging break:", error);
@@ -192,6 +206,10 @@ export default function TimerComponent() {
   };
 
   const toggleTimer = () => {
+    if (!isRunning) {
+      // When starting, record the start time
+      setFocusStartTime(Date.now());
+    }
     setShowControls(!isRunning);
     setIsRunning(!isRunning);
   };
@@ -200,6 +218,7 @@ export default function TimerComponent() {
     setIsRunning(false);
     setShowControls(true);
     setTimeLeft(reminderInterval * 60);
+    setFocusStartTime(null);
     await clearTimerState();
   };
 
@@ -219,9 +238,17 @@ export default function TimerComponent() {
 
       if (profiles?.length) {
         const profile = profiles[0];
+        // Calculate focus duration in minutes
+        const focusDurationMinutes = focusStartTime
+          ? Math.floor((Date.now() - focusStartTime) / (1000 * 60))
+          : reminderInterval;
+
         await supabase.from("break_logs").insert({
           user_id: profile.id,
-          break_duration_minutes: reminderInterval,
+          break_duration_minutes: focusDurationMinutes,
+          focus_start_time: focusStartTime
+            ? new Date(focusStartTime).toISOString()
+            : null,
           logged_at: new Date().toISOString(),
         });
 
@@ -231,8 +258,8 @@ export default function TimerComponent() {
           Math.floor(Math.random() * exercises.length)
         ] as Exercise;
 
-        sendNotification("Break Logged!", {
-          body: `Your ${reminderInterval}-minute break has been recorded. Try the "${randomExercise.title}" exercise!`,
+        sendNotification("Focus Session Logged!", {
+          body: `Your ${focusDurationMinutes}-minute focus session has been recorded. Try the "${randomExercise.title}" exercise!`,
           tag: "break-logged",
           data: {
             url: `/exercises/${randomExercise.id}`,
@@ -242,6 +269,7 @@ export default function TimerComponent() {
 
         await updateLastBreakTime();
         setTimeLeft(reminderInterval * 60);
+        setFocusStartTime(null);
       }
     } catch (error) {
       console.error("Error logging break:", error);
@@ -277,8 +305,8 @@ export default function TimerComponent() {
         </CardTitle>
         <CardDescription className="text-center text-slate-500">
           {isRunning
-            ? `Stay focused on your ${reminderInterval}-minute break`
-            : `Take a mindful ${reminderInterval}-minute break`}
+            ? `Focusing for ${reminderInterval} minutes...`
+            : `Focus for ${reminderInterval} minutes before your next break`}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col justify-center items-center space-y-8 relative z-10">
@@ -370,12 +398,12 @@ export default function TimerComponent() {
               className="w-full max-w-xs mx-auto bg-white/80 border-teal-200 text-teal-700 hover:bg-teal-50/80 transition-all duration-500 ease-out hover:shadow-md backdrop-blur-sm"
               disabled={isLoading}
             >
-              {isLoading ? "Logging..." : "Log Break Now"}
+              {isLoading ? "Logging..." : "Log Focus Session Now"}
             </Button>
 
             <div className="w-full max-w-xs pt-6 border-t border-teal-200/50">
               <label className="text-sm font-medium text-teal-700 block mb-3 text-center">
-                Break Duration: {reminderInterval} minutes
+                You'll focus for {reminderInterval} minutes
               </label>
               <input
                 type="range"

@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { registerServiceWorker } from "@/lib/notifications";
-import HeaderMenu from "@/components/header-menu";
+import ModernHeader from "@/components/modern-header";
 import TimerComponent from "@/components/timer";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -49,19 +48,12 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
-      <header className="bg-white/80 dark:bg-gray-800/80 shadow-sm border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-teal-800 dark:text-teal-200">
-            Eye Break
-          </h1>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <HeaderMenu user={user} onLogout={handleLogout} />
-          </div>
-        </div>
-      </header>
+      <ModernHeader
+        user={user}
+        onLogout={handleLogout}
+      />
 
-      <main className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-12">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center">
           {/* Centered Timer with more spacing */}
           <div className="w-full max-w-3xl mb-12">
