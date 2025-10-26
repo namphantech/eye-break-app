@@ -94,10 +94,10 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -109,30 +109,34 @@ export default function ProfilePage() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-foreground">
             Profile Information
           </h1>
-          <Button variant="outline" onClick={handleBack}>
+          <Button
+            variant="outline"
+            onClick={handleBack}
+            className="border-border bg-background/50"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Button>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div className="bg-card/80 backdrop-blur-sm rounded-lg shadow p-6 border border-border">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Email
               </label>
               <Input
                 type="email"
                 value={profile?.email || ""}
                 disabled
-                className="bg-gray-50 dark:bg-gray-700"
+                className="bg-background/50 border-border"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Full Name
               </label>
               <Input
@@ -142,12 +146,12 @@ export default function ProfilePage() {
                   handleInputChange("full_name", e.target.value)
                 }
                 placeholder="Enter your full name"
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="bg-background/50 border-border"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Username
               </label>
               <Input
@@ -157,12 +161,12 @@ export default function ProfilePage() {
                   handleInputChange("username", e.target.value)
                 }
                 placeholder="Enter your username"
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="bg-background/50 border-border"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Bio
               </label>
               <Textarea
@@ -172,12 +176,12 @@ export default function ProfilePage() {
                 }
                 placeholder="Tell us about yourself"
                 rows={3}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="bg-background/50 border-border"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Website
               </label>
               <Input
@@ -187,12 +191,16 @@ export default function ProfilePage() {
                   handleInputChange("website", e.target.value)
                 }
                 placeholder="https://example.com"
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="bg-background/50 border-border"
               />
             </div>
 
             <div className="pt-4">
-              <Button onClick={handleSave} disabled={isSaving}>
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="bg-primary hover:bg-primary/90"
+              >
                 <Save className="mr-2 h-4 w-4" />
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>

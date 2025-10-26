@@ -19,11 +19,13 @@ import {
   X,
   Sun,
   Moon,
+  BarChart3,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Link from "next/link";
 
 export default function ModernHeader({
   user,
@@ -43,73 +45,81 @@ export default function ModernHeader({
   }, [pathname]);
 
   const navigationItems = [
-    { name: "Dashboard", href: "/dashboard", icon: User },
-    { name: "Statistics", href: "/statistics", icon: BarChart },
-    { name: "History", href: "/history", icon: History },
+    { name: "Report", href: "/report", icon: BarChart3 },
   ];
 
   const isActive = (href: string) => pathname === href;
 
   return (
     <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex-shrink-0 flex items-center">
-              <div className="h-8 w-8 rounded-full bg-teal-500 flex items-center justify-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Left-aligned navigation content */}
+        <div className="flex justify-between items-center h-14">
+          {/* Logo on the left */}
+          <div className="flex items-center flex-shrink-0">
+            <Link
+              href="/dashboard"
+              className="flex items-center hover:opacity-80 transition-opacity"
+            >
+              <div className="h-8 w-8 rounded-full bg-teal-500 flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-sm">👁️</span>
               </div>
               <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
                 LucidEye
               </span>
-            </div>
+            </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex md:items-center md:space-x-8">
+          {/* Right side actions - Report, Theme, User */}
+          <div className="flex items-center space-x-2">
+            {/* Report button with text */}
             {navigationItems.map((item) => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.name}
                   onClick={() => router.push(item.href)}
-                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`hidden md:flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive(item.href)
                       ? "text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/50"
-                      : "text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400"
+                      : "text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
                   <Icon className="h-4 w-4 mr-2" />
-                  {item.name}
+                  <span>{item.name}</span>
                 </button>
               );
             })}
-          </nav>
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-2">
-            {/* Theme toggle - hidden on mobile */}
+            {/* Theme toggle with text */}
             <div className="hidden sm:block">
-              <ThemeToggle />
+              <div className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+                <div className="w-5 h-5 mr-2">
+                  <ThemeToggle />
+                </div>
+                <span>Theme</span>
+              </div>
             </div>
 
-            {/* User menu for desktop */}
+            {/* User menu with text */}
             <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
                     <User className="h-4 w-4 mr-2" />
-                    <span className="hidden lg:inline">
-                      {user?.email?.split("@")[0] || "User"}
-                    </span>
+                    <span>Account</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem
                     onClick={() => router.push("/profile")}
                     className={
-                      isActive("/profile") ? "bg-gray-100 dark:bg-gray-800" : ""
+                      pathname === "/profile"
+                        ? "bg-gray-100 dark:bg-gray-800"
+                        : ""
                     }
                   >
                     <Edit className="mr-2 h-4 w-4" />
@@ -118,7 +128,7 @@ export default function ModernHeader({
                   <DropdownMenuItem
                     onClick={() => router.push("/reminders")}
                     className={
-                      isActive("/reminders")
+                      pathname === "/reminders"
                         ? "bg-gray-100 dark:bg-gray-800"
                         : ""
                     }
@@ -157,10 +167,14 @@ export default function ModernHeader({
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navigationItems.map((item) => {
               const Icon = item.icon;
+
               return (
                 <button
                   key={item.name}
-                  onClick={() => router.push(item.href)}
+                  onClick={() => {
+                    router.push(item.href);
+                    setIsMobileMenuOpen(false);
+                  }}
                   className={`flex items-center w-full px-3 py-2 rounded-md text-base font-medium ${
                     isActive(item.href)
                       ? "text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/50"

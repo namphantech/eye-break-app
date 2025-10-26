@@ -113,7 +113,7 @@ self.addEventListener("notificationclick", (event) => {
 self.addEventListener("push", (event) => {
   if (event.data) {
     const data = event.data.json();
-    const title = data.title || "Eye Break Reminder";
+    const title = data.title || "LucidEye Reminder";
     const options = {
       body: data.body || "Time for an eye break!",
       icon: "/icon-192.png",
@@ -156,7 +156,7 @@ async function checkBreakReminder() {
       const req = store.get("reminder-interval");
 
       req.onsuccess = () => {
-        resolve(req.result ? Number(req.result.value) : 20); // default 20 phút
+        resolve(req.result ? Number(req.result.value) : 20); // default 20 minutes
       };
       req.onerror = () => resolve(20);
     });
@@ -173,7 +173,7 @@ async function checkBreakReminder() {
     });
 
     if (Date.now() - lastBreakTime > reminderInterval * 60 * 1000) {
-      self.registration.showNotification("Time for an Eye Break!", {
+      self.registration.showNotification("Time for a Focus Break!", {
         body: `You have been working for a while. Take a ${reminderInterval}-minute break to rest your eyes.`,
         icon: "/icon-192.png",
         badge: "/icon-192.png",

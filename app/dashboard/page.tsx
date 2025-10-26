@@ -58,10 +58,10 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -71,17 +71,17 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50 flex flex-col">
       <ModernHeader user={user} onLogout={handleLogout} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow ">
         <div className="flex flex-col items-center">
           {/* Centered Timer with more spacing */}
-          <div className="w-full max-w-3xl mb-12">
+          <div className="w-full max-w-4xl mb-12">
             <TimerComponent />
           </div>
         </div>
       </main>
 
       {/* Footer with copyright */}
-      <footer className="py-4 text-center text-sm text-gray-500">
+      <footer className="py-4 text-center text-sm text-muted-foreground border-t border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} LucidEye. All rights reserved.</p>
         </div>

@@ -87,24 +87,24 @@ export default function AuthPage() {
       enableSystem={false}
       disableTransitionOnChange
     >
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <Card className="w-full max-w-md shadow-lg">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50/50 to-cyan-50/50 p-4">
+        <Card className="w-full max-w-md shadow-lg bg-card/80 backdrop-blur-sm border-border">
           <CardHeader className="space-y-2 text-center">
             <div className="text-4xl mb-2">👁️</div>
-            <CardTitle className="text-3xl">Eye Break</CardTitle>
+            <CardTitle className="text-3xl text-foreground">LucidEye</CardTitle>
             <CardDescription>
               {isSignUp ? "Create your account" : "Sign in to your account"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+              <div className="p-3 bg-red-50/80 border border-red-200/80 rounded-md text-sm text-red-700 backdrop-blur-sm">
                 {error}
               </div>
             )}
 
             {successMessage && (
-              <div className="p-3 bg-green-50 border border-green-200 rounded-md text-sm text-green-700">
+              <div className="p-3 bg-green-50/80 border border-green-200/80 rounded-md text-sm text-green-700 backdrop-blur-sm">
                 {successMessage}
               </div>
             )}
@@ -117,6 +117,7 @@ export default function AuthPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 required
+                className="bg-background/50 border-border"
               />
               <Input
                 type="password"
@@ -125,10 +126,11 @@ export default function AuthPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
                 required
+                className="bg-background/50 border-border"
               />
               <Button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={isLoading}
               >
                 {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
@@ -137,10 +139,10 @@ export default function AuthPage() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
+                <span className="px-2 bg-card text-muted-foreground">
                   Or continue with
                 </span>
               </div>
@@ -149,7 +151,7 @@ export default function AuthPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full bg-transparent"
+              className="w-full bg-background/50 border-border"
               onClick={handleGoogleAuth}
               disabled={isLoading}
             >
@@ -163,7 +165,7 @@ export default function AuthPage() {
                 setError(null);
                 setSuccessMessage(null);
               }}
-              className="w-full text-sm text-center text-indigo-600 hover:text-indigo-700 font-medium"
+              className="w-full text-sm text-center text-primary hover:text-primary/80 font-medium"
               disabled={isLoading}
             >
               {isSignUp

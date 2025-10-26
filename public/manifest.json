@@ -1,13 +1,13 @@
 {
-  "name": "Eye Break - Smart Eye Relaxation",
-  "short_name": "Eye Break",
+  "name": "LucidEye - Smart Eye Relaxation",
+  "short_name": "LucidEye",
   "description": "Take regular breaks to protect your eyes with smart reminders and analytics",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
-  "theme_color": "#4f46e5",
+  "theme_color": "#3BAE8A",
   "icons": [
     {
       "src": "/icon-192.png",
