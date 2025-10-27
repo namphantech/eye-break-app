@@ -169,6 +169,17 @@ export default function TimerComponent() {
           ? Math.floor((Date.now() - focusStartTime) / (1000 * 60))
           : reminderInterval;
 
+        console.log({
+          data: {
+            user_id: profile.id,
+            break_duration_minutes: focusDurationMinutes,
+            focus_start_time: focusStartTime
+              ? new Date(focusStartTime).toISOString()
+              : null,
+            logged_at: new Date().toISOString(),
+          },
+        });
+
         await supabase.from("break_logs").insert({
           user_id: profile.id,
           break_duration_minutes: focusDurationMinutes,
@@ -305,10 +316,10 @@ export default function TimerComponent() {
       )}
 
       <CardHeader className="pb-4 relative z-10">
-        <CardTitle className="text-center text-2xl font-bold text-teal-800">
+        <CardTitle className="text-center text-2xl font-bold text-gray-800">
           Focus Timer
         </CardTitle>
-        <CardDescription className="text-center text-slate-500">
+        <CardDescription className="text-center text-gray-500">
           {isRunning
             ? `Focusing for ${reminderInterval} minutes...`
             : `Focus for ${reminderInterval} minutes before your next break`}
@@ -365,7 +376,7 @@ export default function TimerComponent() {
               transform="rotate(-90 50 50)"
               className={
                 isRunning
-                  ? "transition-all duration-1000 ease-out"
+                  ? "transition-all duration-1000 ease-out animate-pulse"
                   : "transition-all duration-700 ease-out"
               }
             />

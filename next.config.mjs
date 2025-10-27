@@ -6,6 +6,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  reactStrictMode: false,
   images: {
     unoptimized: true,
   },
@@ -29,4 +30,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-

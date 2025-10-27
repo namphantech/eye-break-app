@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getServiceWorkerSettings } from "@/lib/indexedb/utils";
-import { registerServiceWorker } from "@/lib/notifications";
 
 export default function ReminderToggle() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -71,7 +70,7 @@ export default function ReminderToggle() {
   };
 
   return (
-    <Card className="mb-6 border-teal-200 bg-teal-50">
+    <Card className="mb-6 border-teal-200/80 bg-teal-50/80">
       <CardHeader>
         <CardTitle className="text-lg">Break Reminders</CardTitle>
         <CardDescription>
@@ -91,10 +90,10 @@ export default function ReminderToggle() {
                 onChange={(e) =>
                   setInterval(parseInt(e.target.value, 10) || 30)
                 }
-                className="w-24"
+                className="w-24 bg-white/80 border-teal-200"
                 disabled={isLoading}
               />
-              <span className="text-sm text-gray-600">minutes</span>
+              <span className="text-sm text-teal-700">minutes</span>
             </div>
           </div>
           <Button
@@ -109,14 +108,14 @@ export default function ReminderToggle() {
         {status && (
           <div
             className={`text-sm ${
-              status.includes("Failed") ? "text-red-600" : "text-teal-600"
+              status.includes("Failed") ? "text-red-600" : "text-teal-700"
             }`}
           >
             {status}
           </div>
         )}
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-teal-600">
           {isEnabled
             ? `You'll receive a reminder every ${interval} minutes.`
             : "Enable to receive periodic eye break reminders."}

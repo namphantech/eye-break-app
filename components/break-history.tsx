@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { BreakLog } from "@/lib/types";
+import LoadingSpinner from "./ui/loading-spinner";
 
 export default function BreakHistory() {
   const [logs, setLogs] = useState<BreakLog[]>([]);
@@ -56,16 +57,14 @@ export default function BreakHistory() {
   }, [supabase]);
 
   if (isLoading) {
-    return <div className="text-center text-gray-600">Loading history...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
-    <Card>
+    <Card className="bg-teal-50/80 border-0">
       <CardHeader>
         <CardTitle>Recent Focus Sessions</CardTitle>
-        <CardDescription>
-          Your last 10 focus sessions
-        </CardDescription>
+        <CardDescription>Your last 10 focus sessions</CardDescription>
       </CardHeader>
       <CardContent>
         {logs.length === 0 ? (
@@ -77,33 +76,33 @@ export default function BreakHistory() {
             {logs.map((log) => (
               <div
                 key={log.id}
-                className="flex flex-col p-4 bg-gray-50 rounded-lg border border-gray-200"
+                className="flex flex-col p-4 bg-white/80 rounded-lg border border-teal-100/80"
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-medium text-teal-800">
                       {log.break_duration_minutes} minutes focused
                     </div>
                     {log.focus_start_time && (
-                      <div className="text-sm text-gray-600 mt-1">
-                        Started: {new Date(log.focus_start_time).toLocaleTimeString([], {
+                      <div className="text-sm text-teal-600 mt-1">
+                        Started:{" "}
+                        {new Date(log.focus_start_time).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
-                        })} on {new Date(log.focus_start_time).toLocaleDateString()}
+                        })}{" "}
+                        on {new Date(log.focus_start_time).toLocaleDateString()}
                       </div>
                     )}
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-600">
-                      Completed
-                    </div>
-                    <div className="text-sm font-medium text-teal-600">
+                    <div className="text-sm text-teal-600">Completed</div>
+                    <div className="text-sm font-medium text-teal-700">
                       {new Date(log.logged_at).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-teal-500">
                       {new Date(log.logged_at).toLocaleDateString()}
                     </div>
                   </div>

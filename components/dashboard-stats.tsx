@@ -19,6 +19,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import LoadingSpinner from "./ui/loading-spinner";
 
 export default function DashboardStats() {
   const [stats, setStats] = useState<BreakStats | null>(null);
@@ -64,7 +65,6 @@ export default function DashboardStats() {
 
         const totalBreaks = logs.length;
 
-    
         const totalDuration = logs.reduce(
           (sum: number, log: BreakLog) => sum + log.break_duration_minutes,
           0
@@ -87,10 +87,57 @@ export default function DashboardStats() {
             return { day: dayStr, breaks: count };
           });
 
+        const calculateStreaks = (logs: BreakLog[]) => {
+          if (!logs || logs.length === 0) {
+            return { longestStreak: 0, currentStreak: 0 };
+          }
+
+          const dateSet = new Set(
+            logs.map(
+              (log) => new Date(log.logged_at).toISOString().split("T")[0]
+            )
+          );
+
+          const sortedDates = Array.from(dateSet)
+            .map((d) => new Date(d))
+            .sort((a, b) => a.getTime() - b.getTime());
+
+          let longestStreak = 0;
+          let streak = 1;
+          let prevDate: Date | null = null;
+
+          for (const date of sortedDates) {
+            if (prevDate) {
+              const diffDays =
+                (date.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
+              streak = diffDays === 1 ? streak + 1 : 1;
+            }
+            longestStreak = Math.max(longestStreak, streak);
+            prevDate = date;
+          }
+
+          const today = new Date();
+          let currentStreak = 0;
+          for (let i = 0; i < 365; i++) {
+            const date = new Date();
+            date.setDate(today.getDate() - i);
+            const key = date.toISOString().split("T")[0];
+            if (dateSet.has(key)) {
+              currentStreak++;
+            } else {
+              break;
+            }
+          }
+
+          return { longestStreak, currentStreak };
+        };
+
+        const { longestStreak } = calculateStreaks(logs as BreakLog[]);
+
         setStats({
           totalBreaks,
           averageInterval: averageDuration,
-          longestStreak: 0,
+          longestStreak,
           weeklyData,
         });
       } catch (error) {
@@ -106,7 +153,7 @@ export default function DashboardStats() {
   }, [supabase]);
 
   if (isLoading) {
-    return <div className="text-center text-gray-600">Loading stats...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!stats) {
@@ -116,7 +163,7 @@ export default function DashboardStats() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-4">
-        <Card className="bg-white hover:shadow-md transition-shadow">
+        <Card className="bg-teal-50/80 hover:shadow-md transition-shadow border-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-teal-800">
               Total Focus Sessions
@@ -130,7 +177,7 @@ export default function DashboardStats() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white hover:shadow-md transition-shadow">
+        <Card className="bg-teal-50/80 hover:shadow-md transition-shadow border-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-teal-800">
               Avg. Duration
@@ -144,7 +191,7 @@ export default function DashboardStats() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white hover:shadow-md transition-shadow">
+        <Card className="bg-teal-50/80 hover:shadow-md transition-shadow border-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-teal-800">
               Longest Streak
@@ -159,7 +206,7 @@ export default function DashboardStats() {
         </Card>
       </div>
 
-      <Card className="bg-white">
+      <Card className="bg-teal-50/80 border-0">
         <CardHeader>
           <CardTitle>Weekly Focus Sessions</CardTitle>
           <CardDescription>Focus sessions logged this week</CardDescription>
@@ -167,13 +214,13 @@ export default function DashboardStats() {
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="day" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#a3e4d7" />
+              <XAxis dataKey="day" stroke="#2e8c70" />
+              <YAxis stroke="#2e8c70" />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #e5e7eb",
+                  backgroundColor: "#f2f8f5",
+                  border: "1px solid #a3e4d7",
                   borderRadius: "8px",
                 }}
               />

@@ -1,8 +1,8 @@
-# LucidEye - Smart Eye Relaxation App
+# Fresh Eye - Smart Eye Relaxation App
 
 ## Project Overview
 
-LucidEye is a web application designed to help users maintain healthy eye habits by taking regular breaks from screen time. The app combines a Pomodoro-style timer with health-conscious reminders to encourage users to rest their eyes periodically throughout the day.
+Fresh Eye is a web application designed to help users maintain healthy eye habits by taking regular breaks from screen time. The app combines a Pomodoro-style timer with health-conscious reminders to encourage users to rest their eyes periodically throughout the day.
 
 ## Core Features
 

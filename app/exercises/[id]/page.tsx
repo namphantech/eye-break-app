@@ -108,7 +108,7 @@ export default function ExercisePage() {
       <div className="min-h-screen bg-gradient-to-br from-teal-900/10 to-cyan-900/10">
         <ModernHeader user={user} onLogout={handleLogout} />
         <div className="flex flex-col items-center justify-center h-screen text-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-50">
             Exercise not found
           </h1>
           <Button onClick={() => router.push("/dashboard")}>
@@ -124,8 +124,8 @@ export default function ExercisePage() {
       <ModernHeader user={user} onLogout={handleLogout} />
 
       <div className="flex flex-col items-center justify-center py-8 text-center gap-6 p-4">
-        <h1 className="text-3xl font-bold text-foreground">{exercise.title}</h1>
-        <p className="text-lg text-muted-foreground max-w-md">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-50">{exercise.title}</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-md">
           {exercise.description}
         </p>
 
@@ -197,7 +197,7 @@ export default function ExercisePage() {
         </div>
 
         {/* Timer status text */}
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           {isCounting ? "Remaining" : "Ready"}
         </div>
 

@@ -26,7 +26,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
-
+import Image from "next/image";
 export default function ModernHeader({
   user,
   onLogout,
@@ -51,7 +51,7 @@ export default function ModernHeader({
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 sticky top-0 z-50">
+    <header className="bg-[#F2F8F5]/90 dark:bg-[#0E1815]/90 backdrop-blur-md  border-b border-[#DCEEE7]/70 dark:border-[#1B2B25]/70 sticky top-0 z-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Left-aligned navigation content */}
         <div className="flex justify-between items-center h-14">
@@ -203,38 +203,59 @@ export default function ModernHeader({
               </Button>
             </div>
 
-            {/* Mobile user actions */}
+            {/* Mobile user menu */}
             <div className="px-3 py-2 border-t border-gray-200 dark:border-gray-800">
-              <button
-                onClick={() => {
-                  router.push("/profile");
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400"
-              >
-                <Edit className="h-5 w-5 mr-3" />
-                Edit Profile
-              </button>
-              <button
-                onClick={() => {
-                  router.push("/reminders");
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400"
-              >
-                <Settings className="h-5 w-5 mr-3" />
-                Reminder Settings
-              </button>
-              <button
-                onClick={() => {
-                  onLogout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 dark:text-gray-300 dark:hover:text-red-400"
-              >
-                <LogOut className="h-5 w-5 mr-3" />
-                Logout
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-teal-600 dark:text-gray-300 dark:hover:text-teal-400 justify-between"
+                  >
+                    <div className="flex items-center">
+                      <User className="h-5 w-5 mr-3" /> Account
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 ml-3">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push("/profile");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={
+                      pathname === "/profile"
+                        ? "bg-gray-100 dark:bg-gray-800"
+                        : ""
+                    }
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    <span>Edit Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push("/reminders");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={
+                      pathname === "/reminders"
+                        ? "bg-gray-100 dark:bg-gray-800"
+                        : ""
+                    }
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Reminder Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>

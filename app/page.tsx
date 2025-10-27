@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerServiceWorker } from "@/lib/notifications";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export default function Home() {
   const router = useRouter();
