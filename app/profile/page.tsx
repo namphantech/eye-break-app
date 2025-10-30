@@ -107,7 +107,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
       <ModernHeader user={user} onLogout={handleLogout} />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-foreground">
             Profile Information

@@ -301,7 +301,7 @@ export default function TimerComponent() {
   const isCriticalTime = timeLeft <= 10 && timeLeft > 0;
 
   return (
-    <Card className="h-full flex flex-col bg-gradient-to-br from-teal-50/80 to-cyan-50/80 border-0 shadow-none relative overflow-hidden backdrop-blur-sm">
+    <Card className="h-full flex flex-col bg-gradient-to-br from-teal-50/80 to-cyan-50/80 shadow-none relative overflow-hidden backdrop-blur-sm">
       {/* Soft blur background effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-teal-100/20 backdrop-blur-[2px]"></div>
 

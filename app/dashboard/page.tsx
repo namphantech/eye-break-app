@@ -71,17 +71,17 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-teal-50/50 to-cyan-50/50 flex flex-col">
       <ModernHeader user={user} onLogout={handleLogout} />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow ">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow ">
         <div className="flex flex-col items-center">
           {/* Centered Timer with more spacing */}
-          <div className="w-full max-w-4xl mb-12">
+          <div className="w-full max-w-2xl mb-12">
             <TimerComponent />
           </div>
 
           {/* App description section - only shown when timer is not running */}
 
-          <div className="w-full max-w-4xl mb-12">
-            <div className="bg-[#F2F8F5]/90 dark:bg-[#0E1815]/90  backdrop-blur-sm rounded-xl p-6 border border-emerald-100 dark:border-gray-700 shadow-sm animate-fadeIn">
+          <div className="w-full max-w-2xl mb-12">
+            <div className="bg-[#F2F8F5]/90 dark:bg-[#0E1815]/90  backdrop-blur-sm rounded-xl p-6 shadow-sm animate-fadeIn">
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-emerald-300 mb-4">
                 🌿 What is LucidEye?
               </h2>
@@ -137,8 +137,8 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer with copyright */}
-      <footer className="py-4 text-center text-sm text-muted-foreground border-t border-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="py-4 text-center text-sm text-muted-foreground">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} LucidEye. All rights reserved.</p>
         </div>
       </footer>
