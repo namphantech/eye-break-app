@@ -2,12 +2,13 @@
 
 import { useParams, useRouter } from "next/navigation";
 import exercises from "@/lib/exercises.json";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Lottie from "lottie-react";
 import forestBlur from "@/public/animations/forest-blur.json";
 import ModernHeader from "@/components/modern-header";
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { formatTime } from "@/lib/utils";
 
 export default function ExercisePage() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ export default function ExercisePage() {
   const [isCounting, setIsCounting] = useState(false);
   const [user, setUser] = useState<any>(null);
   const supabase = getSupabaseClient();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const exercise = exercises.find((e) => e.id === id);
 
@@ -48,6 +50,7 @@ export default function ExercisePage() {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             setIsCounting(false);
+            stopExerciseAudio(); // Stop the exercise audio when timer completes
             playCompletionSound();
             return 0;
           }
@@ -73,24 +76,63 @@ export default function ExercisePage() {
     router.push("/auth");
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+  const playExerciseAudio = () => {
+    if (exercise) {
+      // Stop any existing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
+      // Play new audio
+      const audio = new Audio(`/sounds/${exercise.sound}`);
+      audio.loop = true;
+      audio.play().catch((e) => console.log("Audio play failed:", e));
+      audioRef.current = audio;
+    }
+  };
+
+  const stopExerciseAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+  };
+
+  const pauseExerciseAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+  };
+
+  const resumeExerciseAudio = () => {
+    if (audioRef.current) {
+      audioRef.current
+        .play()
+        .catch((e) => console.log("Audio resume failed:", e));
+    }
   };
 
   const handleStart = () => {
     setIsCounting(true);
-    if (exercise) {
-      const audio = new Audio(`/sounds/${exercise.sound}`);
-      audio.loop = true;
-      audio.play().catch((e) => console.log("Audio play failed:", e));
+    playExerciseAudio(); // Play audio when starting
+  };
+
+  const handlePauseResume = () => {
+    const newIsCounting = !isCounting;
+    setIsCounting(newIsCounting);
+
+    if (newIsCounting) {
+      resumeExerciseAudio(); // Resume audio when continuing
+    } else {
+      pauseExerciseAudio(); // Pause audio when pausing
     }
   };
 
   const handleDone = () => {
+    // Ensure audio is stopped when done
+    stopExerciseAudio();
+
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("👏 Great job!", {
         body: "You just helped your eyes rest!",
@@ -124,7 +166,9 @@ export default function ExercisePage() {
       <ModernHeader user={user} onLogout={handleLogout} />
 
       <div className="flex flex-col items-center justify-center py-8 text-center gap-6 p-4">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-50">{exercise.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-50">
+          {exercise.title}
+        </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-md">
           {exercise.description}
         </p>
@@ -215,7 +259,7 @@ export default function ExercisePage() {
               {timeLeft > 0 ? (
                 <Button
                   className="px-6 py-3 text-lg bg-teal-600 hover:bg-teal-700 transition-all duration-500 ease-out hover:scale-105"
-                  onClick={() => setIsCounting(!isCounting)}
+                  onClick={handlePauseResume}
                 >
                   {isCounting ? "Pause" : "Continue"}
                 </Button>
