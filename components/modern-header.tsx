@@ -65,7 +65,7 @@ export default function ModernHeader({
                 <span className="text-white font-bold text-sm">👁️</span>
               </div>
               <span className="ml-2 text-xl font-bold text-gray-800 dark:text-white">
-                LucidEye
+                Eylax
               </span>
             </Link>
           </div>

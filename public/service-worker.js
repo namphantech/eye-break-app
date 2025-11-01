@@ -113,7 +113,7 @@ self.addEventListener("notificationclick", (event) => {
 self.addEventListener("push", (event) => {
   if (event.data) {
     const data = event.data.json();
-    const title = data.title || "LucidEye Reminder";
+    const title = data.title || "Eylax Reminder";
     const options = {
       body: data.body || "Time for an eye break!",
       icon: "/icon-192.png",

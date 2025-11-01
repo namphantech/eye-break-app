@@ -83,10 +83,10 @@ export default function DashboardPage() {
           <div className="w-full max-w-2xl mb-12">
             <div className="bg-[#F2F8F5]/90 dark:bg-[#0E1815]/90  backdrop-blur-sm rounded-xl p-6 shadow-sm animate-fadeIn">
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-emerald-300 mb-4">
-                🌿 What is LucidEye?
+                🌿 What is Eylax?
               </h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                <strong>LucidEye</strong> is a mindful focus companion that
+                <strong>Eylax</strong> is a mindful focus companion that
                 helps you maintain healthy screen habits. Inspired by the{" "}
                 <span className="font-medium text-gray-800 dark:text-emerald-200">
                   Pomodoro Technique
@@ -110,7 +110,7 @@ export default function DashboardPage() {
               </p>
 
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-emerald-300 mb-4">
-                👁️ Why use LucidEye?
+                👁️ Why use Eylax?
               </h2>
               <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 mb-4 space-y-2">
                 <li>
@@ -124,10 +124,10 @@ export default function DashboardPage() {
               </ul>
 
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-emerald-300 mb-4">
-                ⏳ How does LucidEye work?
+                ⏳ How does Eylax work?
               </h2>
               <p className="text-gray-600 dark:text-gray-300">
-                Every 20 minutes, LucidEye gently reminds you to rest your eyes
+                Every 20 minutes, Eylax gently reminds you to rest your eyes
                 and guides you through a short relaxation or eye exercise —
                 keeping your vision and focus fresh throughout the day.
               </p>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
       {/* Footer with copyright */}
       <footer className="py-4 text-center text-sm text-muted-foreground">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} LucidEye. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Eylax. All rights reserved.</p>
         </div>
       </footer>
     </div>

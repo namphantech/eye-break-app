@@ -10,14 +10,14 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LucidEye - Smart Eye Relaxation",
+  title: "Eylax - Smart Eye Relaxation",
   description:
     "Take regular breaks to protect your eyes with smart reminders and analytics",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "LucidEye",
+    title: "Eylax",
   },
 };
 

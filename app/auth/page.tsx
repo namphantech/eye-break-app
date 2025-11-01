@@ -91,7 +91,7 @@ export default function AuthPage() {
         <Card className="w-full max-w-md shadow-lg bg-card/80 backdrop-blur-sm border-border">
           <CardHeader className="space-y-2 text-center">
             <div className="text-4xl mb-2">👁️</div>
-            <CardTitle className="text-3xl text-foreground">LucidEye</CardTitle>
+            <CardTitle className="text-3xl text-foreground">Eylax</CardTitle>
             <CardDescription>
               {isSignUp ? "Create your account" : "Sign in to your account"}
             </CardDescription>
